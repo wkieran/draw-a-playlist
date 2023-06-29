@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from PIL import Image, ImageTk
+from tkinter import colorchooser
 
 class App(ctk.CTk):
 
@@ -51,22 +52,22 @@ class Painter(ctk.CTkFrame):
         
     def select_color(self, color):
         global selected_color
-        selected_color = color
+        self.selected_color = color
 
     def choose_color(self):
         global selected_color
-        selected_color = colorchooser.askcolor(title='Choose color')[1]
+        self.selected_color = colorchooser.askcolor(title='Choose color')[1]
 
     def start_drawing(self, event):
         self.canvas.data = {"start_x": event.x, "start_y": event.y}
-        self.canvas.bind("<B1-Motion>", draw)
+        self.canvas.bind("<B1-Motion>", self.draw)
 
     def draw(self, event):
         start_x = self.canvas.data["start_x"]
         start_y = self.canvas.data["start_y"]
         current_x = event.x
         current_y = event.y
-        self.canvas.create_line(start_x, start_y, current_x, current_y, fill=selected_color, width=2)
+        self.canvas.create_line(start_x, start_y, current_x, current_y, fill=self.selected_color, width=2)
 
         # Update the starting position for the next segment
         self.canvas.data["start_x"] = current_x
